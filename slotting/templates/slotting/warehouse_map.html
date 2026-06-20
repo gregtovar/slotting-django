@@ -1,0 +1,45 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<h1>{{ cfg.icon }} {{ cfg.label }}</h1>
+<p class="muted">{{ cfg.description }}</p>
+<p class="muted">Click any segment to zoom in; click the center label to zoom back out. Color = picking activity in the date range below.</p>
+
+<div class="card">
+    <form method="get">
+        <p class="muted">Data on file spans {{ data_min|date:"Y-m-d" }} to {{ data_max|date:"Y-m-d" }}.</p>
+        <div class="preset-bar">
+            {% for label, start, end in presets %}
+            <a href="?start={{ start|date:'Y-m-d' }}&end={{ end|date:'Y-m-d' }}&metric={{ metric }}">{{ label }}</a>
+            {% endfor %}
+        </div>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-end;">
+            <div class="field" style="min-width:160px;">
+                <label>Start</label>
+                <input class="form-control" type="date" name="start" value="{{ start|date:'Y-m-d' }}">
+            </div>
+            <div class="field" style="min-width:160px;">
+                <label>End</label>
+                <input class="form-control" type="date" name="end" value="{{ end|date:'Y-m-d' }}">
+            </div>
+            <div class="field" style="min-width:160px;">
+                <label>Color by</label>
+                <select class="form-select" name="metric">
+                    <option value="order_lines" {% if metric == "order_lines" %}selected{% endif %}>order_lines</option>
+                    <option value="units" {% if metric == "units" %}selected{% endif %}>units</option>
+                </select>
+            </div>
+            <div class="field"><button class="btn" type="submit">&#9654; Update</button></div>
+        </div>
+    </form>
+</div>
+
+{% if error %}
+<div class="error-banner">{{ error }}</div>
+{% elif chart_html %}
+<div class="card">{{ chart_html|safe }}</div>
+<p class="muted">Coloring by {{ metric }}. Leaf-level (Bin) segments show which SKU is homed there on hover.</p>
+<a class="btn secondary" href="{% url 'warehouse_map_export' %}?start={{ start|date:'Y-m-d' }}&end={{ end|date:'Y-m-d' }}">Export full activity breakdown to CSV</a>
+{% endif %}
+
+{% endblock %}

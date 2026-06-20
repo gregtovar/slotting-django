@@ -1,0 +1,26 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<h1>{{ cfg.icon }} {{ cfg.label }} - Delete Record</h1>
+
+<div class="card" style="max-width:640px;">
+    {% if row %}
+    <p>Are you sure you want to delete this record? This cannot be undone (a backup of the file is kept automatically).</p>
+    <table class="grid">
+        {% for k, v in row.items %}
+        <tr><th style="width:200px;">{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="muted">This record no longer exists - it may already have been deleted.</p>
+    {% endif %}
+
+    <form method="post" style="margin-top:18px;">
+        {% csrf_token %}
+        {% for kv in key_values %}<input type="hidden" name="key" value="{{ kv }}">{% endfor %}
+        {% if row %}<button class="btn danger" type="submit">Delete Permanently</button>{% endif %}
+        <a class="btn secondary" href="{% url 'table_list' table_key=cfg.key %}">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<h1>{{ cfg.icon }} {{ cfg.label }} - {% if mode == "add" %}Add Record{% else %}Edit Record{% endif %}</h1>
+
+<div class="card" style="max-width:640px;">
+    <form method="post"
+          {% if mode == "edit" %}
+          action="{% url 'table_edit' table_key=cfg.key %}?{% for kv in key_values %}key={{ kv|urlencode }}&{% endfor %}"
+          {% endif %}>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="error-banner" style="white-space: pre-line;">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        {% for field in form %}
+        <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+        {% endfor %}
+
+        <button class="btn" type="submit">Save</button>
+        <a class="btn secondary" href="{% url 'table_list' table_key=cfg.key %}">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

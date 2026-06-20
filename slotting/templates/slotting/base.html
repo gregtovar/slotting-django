@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'slotting/style.css' %}">
+</head>
+<body>
+
+<div class="navbar">
+    <h1>📦 {{ app_name }}</h1>
+    <div class="subtitle">{{ app_subtitle|upper }}</div>
+</div>
+
+<div class="nav-section">
+    <span class="nav-label">Data</span>
+    {% for t in nav_tables %}<a href="{% url 'table_list' table_key=t.key %}">{{ t.icon }} {{ t.label }}</a>{% endfor %}
+</div>
+<div class="nav-section">
+    <span class="nav-label">Analysis</span>
+    {% for a in nav_analyses %}<a href="{% url 'analysis_run' analysis_key=a.key %}">{{ a.icon }} {{ a.label }}</a>{% endfor %}
+</div>
+<div class="nav-section">
+    <span class="nav-label">Reports</span>
+    {% for r in nav_reports %}{% if r.key == "warehouse_map" %}<a href="{% url 'warehouse_map' %}">{{ r.icon }} {{ r.label }}</a>{% else %}<a href="{% url 'analysis_run' analysis_key=r.key %}">{{ r.icon }} {{ r.label }}</a>{% endif %}{% endfor %}
+</div>
+
+<div class="container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<h1>{{ cfg.icon }} {{ cfg.label }}</h1>
+<p class="muted">{{ cfg.description }}</p>
+
+<div class="toolbar">
+    <a class="btn" href="{% url 'table_add' table_key=cfg.key %}">+ Add Record</a>
+    <form method="get" style="display:flex; gap:8px;">
+        <input class="form-control" type="text" name="q" value="{{ search }}" placeholder="Search..." style="width:240px;">
+        <button class="btn secondary" type="submit">Search</button>
+        {% if search %}<a class="btn secondary" href="{% url 'table_list' table_key=cfg.key %}">Clear</a>{% endif %}
+    </form>
+    <span class="muted">{{ row_count }} total records{% if search %} - {{ total }} match{% endif %}</span>
+</div>
+
+<div class="card" style="overflow-x:auto;">
+    <table class="grid">
+        <thead>
+            <tr>
+                {% for col in grid_columns %}
+                <th>
+                    <a href="?{% if search %}q={{ search }}&{% endif %}sort={{ col.name }}&dir={% if sort_col == col.name and sort_dir == 'asc' %}desc{% else %}asc{% endif %}">
+                        {{ col.label }}{% if sort_col == col.name %}{% if sort_dir == 'asc' %} &uarr;{% else %} &darr;{% endif %}{% endif %}
+                    </a>
+                </th>
+                {% endfor %}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for val in row.values %}<td>{{ val }}</td>{% endfor %}
+                <td>
+                    <a href="{% url 'table_edit' table_key=cfg.key %}?{% for kv in row.key_values %}key={{ kv|urlencode }}&{% endfor %}">Edit</a>
+                    &nbsp;|&nbsp;
+                    <a href="{% url 'table_delete' table_key=cfg.key %}?{% for kv in row.key_values %}key={{ kv|urlencode }}&{% endfor %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="{{ grid_columns|length|add:1 }}" class="muted">No records found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pager">
+    {% if page > 1 %}<a href="?{% if search %}q={{ search }}&{% endif %}{% if sort_col %}sort={{ sort_col }}&dir={{ sort_dir }}&{% endif %}page={{ page|add:"-1" }}">&laquo; Prev</a>{% endif %}
+    <span class="muted">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}<a href="?{% if search %}q={{ search }}&{% endif %}{% if sort_col %}sort={{ sort_col }}&dir={{ sort_dir }}&{% endif %}page={{ page|add:"1" }}">Next &raquo;</a>{% endif %}
+</div>
+
+{% endblock %}

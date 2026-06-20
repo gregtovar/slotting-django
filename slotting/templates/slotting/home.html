@@ -1,0 +1,49 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<p class="muted">
+    Analyze order history and SKU attributes to recommend optimal storage
+    locations - reducing travel time and lowering pick costs.
+</p>
+
+<h2>Data on file</h2>
+<div class="card-grid">
+    {% for cfg, count in table_counts %}
+    <div class="mini-card">
+        <div class="metric">{{ count }}</div>
+        <h3>{{ cfg.icon }} {{ cfg.label }}</h3>
+        <p><a href="{% url 'table_list' table_key=cfg.key %}">Open &rarr;</a></p>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 style="margin-top:32px;">Slotting Analysis & Optimization</h2>
+<p class="muted">Every module starts with a date-range picker.</p>
+<div class="card-grid">
+    {% for a in nav_analyses %}
+    <div class="mini-card">
+        <h3>{{ a.icon }} {{ a.label }}</h3>
+        <p>{{ a.description }}</p>
+        <p><a href="{% url 'analysis_run' analysis_key=a.key %}">Run &rarr;</a></p>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 style="margin-top:32px;">Reports & Dashboards</h2>
+<div class="card-grid">
+    {% for r in nav_reports %}
+    <div class="mini-card">
+        <h3>{{ r.icon }} {{ r.label }}</h3>
+        <p>{{ r.description }}</p>
+        <p>
+            {% if r.key == "warehouse_map" %}
+            <a href="{% url 'warehouse_map' %}">Open &rarr;</a>
+            {% else %}
+            <a href="{% url 'analysis_run' analysis_key=r.key %}">Run &rarr;</a>
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

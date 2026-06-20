@@ -1,0 +1,87 @@
+{% extends "slotting/base.html" %}
+{% block content %}
+
+<h1>{{ cfg.icon }} {{ cfg.label }}</h1>
+<p class="muted">{{ cfg.description }}</p>
+
+<div class="card">
+    <form method="get">
+        <h3 style="margin-top:0;">Date Range</h3>
+        <p class="muted">Data on file spans {{ data_min|date:"Y-m-d" }} to {{ data_max|date:"Y-m-d" }} (presets are anchored to the latest date in your data, not today's date).</p>
+
+        <div class="preset-bar">
+            {% for label, start, end in presets %}
+            <a href="?start={{ start|date:'Y-m-d' }}&end={{ end|date:'Y-m-d' }}">{{ label }}</a>
+            {% endfor %}
+        </div>
+
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+            <div class="field" style="min-width:160px;">
+                <label for="{{ form.start.id_for_label }}">Start</label>
+                {{ form.start }}
+            </div>
+            <div class="field" style="min-width:160px;">
+                <label for="{{ form.end.id_for_label }}">End</label>
+                {{ form.end }}
+            </div>
+        </div>
+
+        {% if cfg.options %}
+        <h3>Options</h3>
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+            {% for field in form %}
+            {% if field.name != "start" and field.name != "end" %}
+            <div class="field" style="min-width:200px;">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if has_run %}
+        <div class="field" style="max-width:320px;">
+            <label>Search results</label>
+            <input class="form-control" type="text" name="q" value="{{ search }}" placeholder="Search results...">
+        </div>
+        {% endif %}
+
+        <button class="btn" type="submit">&#9654; Run Analysis</button>
+    </form>
+</div>
+
+{% if error %}<div class="error-banner">{{ error }}</div>{% endif %}
+
+{% if has_run and not error %}
+{% if summary %}<div class="summary-banner">{{ summary }}</div>{% endif %}
+
+{% if chart_html %}
+<div class="card">{{ chart_html|safe }}</div>
+{% endif %}
+
+<div class="card">
+    <div class="toolbar">
+        <a class="btn secondary" href="{% url 'analysis_export' analysis_key=cfg.key %}?{{ export_query }}">Export to CSV</a>
+        <span class="muted">{{ result_count }} of {{ total_count }} rows shown{% if truncated %} (display capped at 500 - use Export for the full set){% endif %}</span>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="grid">
+            <thead>
+                <tr>{% for col in result_columns %}<th>{{ col.label }}</th>{% endfor %}</tr>
+            </thead>
+            <tbody>
+                {% for row in display_rows %}
+                <tr>{% for val in row %}<td>{{ val }}</td>{% endfor %}</tr>
+                {% empty %}
+                <tr><td colspan="{{ result_columns|length }}" class="muted">No rows in this date range.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
