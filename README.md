@@ -1,0 +1,2 @@
+# slotting-django
+slotting-django
