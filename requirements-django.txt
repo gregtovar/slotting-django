@@ -4,5 +4,9 @@
 # one for whichever UI you're actually running.
 django>=5.0
 plotly>=5.20
+pandas>=2.0          # plotly.express (used for the Warehouse Map icicle chart)
+                     # requires pandas internally to process its input data -
+                     # this isn't optional even though nothing else here uses
+                     # pandas directly.
 gunicorn>=21.0      # production WSGI server (runserver is dev-only)
 whitenoise>=6.6      # serves static files in production without needing nginx
