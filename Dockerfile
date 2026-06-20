@@ -15,8 +15,18 @@ RUN pip install --no-cache-dir -r requirements-django.txt
 
 COPY . .
 
+# Collect static files at BUILD time, not on every container restart -
+# they never change at runtime, so there's no reason to redo this work
+# (and risk it failing) every time the container starts.
+#
+# DJANGO_DEBUG=0 here specifically (separate from whatever Railway sets
+# at runtime) because collectstatic needs to run in production mode to
+# generate the compressed/manifest static files WhiteNoise serves in
+# production - at build time there's no runtime env var yet to tell it
+# that, so it must be set explicitly for this step.
+ENV DJANGO_DEBUG=0
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-CMD python manage.py migrate --noinput && \
-    python manage.py collectstatic --noinput && \
-    gunicorn slotting_django.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn slotting_django.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1"]
