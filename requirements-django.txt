@@ -1,0 +1,8 @@
+# Dependencies for the Django web UI only.
+# The Tkinter desktop app (main.py) and the Streamlit app remain on
+# their own separate requirement sets - you only need to install the
+# one for whichever UI you're actually running.
+django>=5.0
+plotly>=5.20
+gunicorn>=21.0      # production WSGI server (runserver is dev-only)
+whitenoise>=6.6      # serves static files in production without needing nginx

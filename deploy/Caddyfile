@@ -1,0 +1,22 @@
+# OPTIONAL hardening layer - only needed if you have a domain name and
+# want real HTTPS plus a second login layer on top of the VNC password.
+# See "Optional: real HTTPS + a second login" in DEPLOYMENT.md for how
+# to generate the password hashes and run this.
+#
+# Replace the two domains below with subdomains you control, e.g.
+# slotting-a.yourdomain.com / slotting-b.yourdomain.com, each pointed
+# (DNS A record) at this server's IP address.
+
+slotting-a.yourdomain.com {
+    basicauth {
+        usera REPLACE_WITH_HASH_FROM_caddy_hash-password
+    }
+    reverse_proxy localhost:6901
+}
+
+slotting-b.yourdomain.com {
+    basicauth {
+        userb REPLACE_WITH_HASH_FROM_caddy_hash-password
+    }
+    reverse_proxy localhost:6902
+}

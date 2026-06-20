@@ -1,0 +1,6 @@
+# Dependencies for the Streamlit web UI only.
+# The Tkinter desktop app (main.py) remains pure standard library -
+# these are not needed if you're only running main.py.
+streamlit>=1.38
+plotly>=5.20
+pandas>=2.0

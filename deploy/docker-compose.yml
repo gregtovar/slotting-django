@@ -1,0 +1,42 @@
+# Two independent sessions of the Slotting Optimizer, each its own
+# container - completely separate processes, no shared UI state.
+#
+# Both mount the SAME data/ folder, so both people see the same
+# Customers/Master/Orders data (this is meant to be one shared
+# warehouse dataset). Saves are atomic so the file is never left
+# corrupted, but if both people save an edit at almost the same
+# moment, the second save wins - fine for occasional, non-simultaneous
+# use; worth knowing if that ever changes.
+#
+# Usage:
+#   1. Copy this whole `deploy/` folder (plus the `slotting_optimizer/`
+#      folder one level up) onto your server.
+#   2. Set real passwords below (or use a .env file - see DEPLOYMENT.md).
+#   3. docker compose up -d --build
+#   4. Person A opens  http://<server-ip>:6901/vnc.html
+#      Person B opens  http://<server-ip>:6902/vnc.html
+
+services:
+  session-a:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "6901:6080"
+    environment:
+      VNC_PASSWORD: "${SESSION_A_PASSWORD:-changeme-a}"
+    volumes:
+      - ../data:/app/slotting_optimizer/data
+    restart: unless-stopped
+
+  session-b:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "6902:6080"
+    environment:
+      VNC_PASSWORD: "${SESSION_B_PASSWORD:-changeme-b}"
+    volumes:
+      - ../data:/app/slotting_optimizer/data
+    restart: unless-stopped
