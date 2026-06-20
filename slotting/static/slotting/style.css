@@ -95,6 +95,8 @@ a:hover { text-decoration: underline; }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
 .mini-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
 .mini-card h3 { margin: 6px 0 4px; font-size: 15px; color: var(--navy); }
+.card-title-link { color: var(--navy); text-decoration: none; }
+.card-title-link:hover { color: var(--teal-dark); text-decoration: underline; }
 .mini-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
 .mini-card .metric { font-size: 26px; font-weight: 700; color: var(--teal-dark); }
 
