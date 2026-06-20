@@ -9,22 +9,53 @@
 <body>
 
 <div class="navbar">
-    <h1>📦 {{ app_name }}</h1>
-    <div class="subtitle">{{ app_subtitle|upper }}</div>
+    <a href="{% url 'home' %}" class="brand">
+        <span class="brand-icon">📦</span>
+        <span class="brand-text">
+            <span class="brand-title">{{ app_name }}</span>
+            <span class="brand-subtitle">{{ app_subtitle|upper }}</span>
+        </span>
+    </a>
 </div>
 
-<div class="nav-section">
-    <span class="nav-label">Data</span>
-    {% for t in nav_tables %}<a href="{% url 'table_list' table_key=t.key %}">{{ t.icon }} {{ t.label }}</a>{% endfor %}
-</div>
-<div class="nav-section">
-    <span class="nav-label">Analysis</span>
-    {% for a in nav_analyses %}<a href="{% url 'analysis_run' analysis_key=a.key %}">{{ a.icon }} {{ a.label }}</a>{% endfor %}
-</div>
-<div class="nav-section">
-    <span class="nav-label">Reports</span>
-    {% for r in nav_reports %}{% if r.key == "warehouse_map" %}<a href="{% url 'warehouse_map' %}">{{ r.icon }} {{ r.label }}</a>{% else %}<a href="{% url 'analysis_run' analysis_key=r.key %}">{{ r.icon }} {{ r.label }}</a>{% endif %}{% endfor %}
-</div>
+<nav class="nav-bar">
+    <div class="nav-group">
+        <span class="nav-label">Data</span>
+        <div class="nav-pills">
+            {% for t in nav_tables %}
+            <a class="nav-pill" href="{% url 'table_list' table_key=t.key %}">
+                <span class="pill-icon">{{ t.icon }}</span>{{ t.label }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="nav-group">
+        <span class="nav-label">Analysis</span>
+        <div class="nav-pills">
+            {% for a in nav_analyses %}
+            <a class="nav-pill" href="{% url 'analysis_run' analysis_key=a.key %}">
+                <span class="pill-icon">{{ a.icon }}</span>{{ a.label }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="nav-group">
+        <span class="nav-label">Reports</span>
+        <div class="nav-pills">
+            {% for r in nav_reports %}
+            {% if r.key == "warehouse_map" %}
+            <a class="nav-pill" href="{% url 'warehouse_map' %}">
+                <span class="pill-icon">{{ r.icon }}</span>{{ r.label }}
+            </a>
+            {% else %}
+            <a class="nav-pill" href="{% url 'analysis_run' analysis_key=r.key %}">
+                <span class="pill-icon">{{ r.icon }}</span>{{ r.label }}
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</nav>
 
 <div class="container">
     {% if messages %}

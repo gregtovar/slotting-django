@@ -28,21 +28,59 @@ a:hover { text-decoration: underline; }
 
 .navbar {
     background: var(--navy);
-    color: #fff;
-    padding: 18px 28px;
+    padding: 0;
 }
-.navbar h1 { margin: 0; font-size: 22px; }
-.navbar .subtitle { color: #C9D6E3; font-size: 13px; letter-spacing: .04em; margin-top: 2px; }
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 28px;
+    color: #fff;
+    text-decoration: none;
+}
+.brand:hover { text-decoration: none; background: var(--navy-light); }
+.brand-icon { font-size: 38px; line-height: 1; }
+.brand-text { display: flex; flex-direction: column; gap: 3px; }
+.brand-title { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+.brand-subtitle { color: #9FB4C7; font-size: 12.5px; letter-spacing: .08em; font-weight: 600; }
 
-.nav-section {
+.nav-bar {
     background: var(--navy-light);
-    padding: 10px 28px;
+    padding: 16px 28px 18px;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 18px;
+    gap: 22px 36px;
 }
-.nav-section a { color: #DCE6EF; font-size: 13.5px; padding: 4px 0; }
-.nav-section .nav-label { color: #8FA3B8; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; margin-right: 6px; }
+.nav-group { display: flex; flex-direction: column; gap: 8px; }
+.nav-label {
+    color: #8FA3B8;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 700;
+}
+.nav-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.06);
+    color: #E4ECF4;
+    padding: 7px 14px 7px 10px;
+    border-radius: 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background .15s ease, transform .15s ease;
+}
+.nav-pill:hover {
+    background: var(--teal);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+.pill-icon { font-size: 17px; line-height: 1; }
 
 .container { max-width: 1180px; margin: 0 auto; padding: 26px 24px 60px; }
 
