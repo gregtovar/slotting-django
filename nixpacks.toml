@@ -1,0 +1,13 @@
+# Tells Railway's builder (Nixpacks) exactly what to do, instead of
+# relying on auto-detection - this repo has TWO requirements files
+# (one per alternate UI), so auto-detection picks the wrong one
+# (requirements.txt, for the Streamlit UI) unless told otherwise here.
+
+[phases.install]
+cmds = ["pip install -r requirements-django.txt"]
+
+[phases.build]
+cmds = ["python manage.py collectstatic --noinput"]
+
+[start]
+cmd = "python manage.py migrate --noinput && gunicorn slotting_django.wsgi:application --bind 0.0.0.0:$PORT --workers 1"
