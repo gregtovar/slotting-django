@@ -150,3 +150,44 @@ table.grid th a { color: var(--navy); }
 
 .toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
 .pager { display: flex; gap: 10px; align-items: center; margin-top: 14px; font-size: 13.5px; }
+
+/* ===================== Mobile ===================== */
+@media (max-width: 720px) {
+    .container { padding: 16px 14px 40px; }
+
+    .brand { padding: 16px 16px; gap: 12px; }
+    .brand-icon { font-size: 28px; }
+    .brand-title { font-size: 19px; }
+    .brand-subtitle { font-size: 10.5px; }
+
+    .nav-bar { padding: 12px 14px 14px; gap: 14px 18px; }
+    .nav-pill { font-size: 12.5px; padding: 6px 11px 6px 9px; }
+    .pill-icon { font-size: 15px; }
+
+    h1 { font-size: 20px; }
+    h2 { font-size: 17px; }
+
+    .card-grid { grid-template-columns: 1fr; }
+
+    .card, .mini-card { padding: 14px 14px; }
+
+    /* Form rows that use inline flex+min-width on desktop should
+       stack to one field per row on a narrow screen, full width */
+    .field { min-width: 0 !important; width: 100%; }
+    .toolbar > form,
+    div[style*="display:flex"] {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    .toolbar { flex-direction: row; } /* keep toolbar buttons inline, just wrap */
+
+    table.grid { font-size: 12px; }
+    table.grid th, table.grid td { padding: 6px 7px; }
+
+    .preset-bar a { font-size: 12px; padding: 5px 9px; }
+
+    /* Plotly's embedded chart div sometimes carries an inline min-width
+       from its own JS sizing logic - force it to respect the viewport
+       so it doesn't force horizontal scrolling on the whole page */
+    .card > div { max-width: 100%; overflow-x: auto; }
+}

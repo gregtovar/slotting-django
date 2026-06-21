@@ -236,7 +236,7 @@ def analysis_run(request, analysis_key):
                         fig = render_chart_spec(chart_spec)
                         if fig:
                             chart_html = fig.to_html(full_html=False, include_plotlyjs="cdn",
-                                                     config={"displayModeBar": False})
+                                                     config={"displayModeBar": False, "responsive": True})
                 except Exception as exc:  # noqa: BLE001
                     error = f"Something went wrong while running this analysis: {exc}"
         else:
@@ -340,7 +340,7 @@ def warehouse_map_view(request):
             fig = build_warehouse_map_figure(counts, master_rows, metric)
             if fig:
                 chart_html = fig.to_html(full_html=False, include_plotlyjs="cdn",
-                                         config={"displayModeBar": False})
+                                         config={"displayModeBar": False, "responsive": True})
 
     return render(request, "slotting/warehouse_map.html", {
         "cfg": cfg, "presets": presets, "data_min": data_min, "data_max": data_max,
